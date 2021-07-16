@@ -1,5 +1,3 @@
-import profileReducer from './profile-reducer';
-
 const UPDATE_NEW_MESSAGE_BODY = 'UPDATE-NEW-MESSAGE-BODY';
 const SEND_MESSAGE = 'SEND-MESSAGE';
 
@@ -24,29 +22,33 @@ function dialogsReducer(state = initialState, action) {
 
     switch (action.type) {
         case UPDATE_NEW_MESSAGE_BODY:
-            _updateNewMessageBody(state, action.body);
-            break;
+            return _updateNewMessageBody(state, action.body);
+        // break;
         case SEND_MESSAGE:
-            _sendMessage(state);
-            break;
+            return _sendMessage(state);
+        // break;
     }
 
     return state;
 }
 
 function _sendMessage(state) {
-    state.messages.push({
-        id: 6,
-        message: state.newMessageBody,
-    });
+    const stateCopy = {
+        ...state,
+        messages: [...state.messages, {id: 6, message: state.newMessageBody}],
+        newMessageBody: '',
+    };
 
-    state.newMessageBody = '';
-
+    return stateCopy;
 }
 
 function _updateNewMessageBody(state, body) {
-    state.newMessageBody = body;
+    const stateCopy = {
+        ...state,
+        newMessageBody: body,
+    };
 
+    return stateCopy;
 }
 
 export function sendMessageCreator() {

@@ -13,11 +13,11 @@ function profileReducer(state = initialState, action) {
 
     switch (action.type) {
         case ADD_POST:
-            _addPost(state);
-            break;
+            return _addPost(state);
+            // break;
         case UPDATE_NEW_POST_TEXT:
-            _updateNewPostText(state, action.newText);
-            break;
+            return _updateNewPostText(state, action.newText);
+            // break;
     }
 
     return state;
@@ -30,12 +30,22 @@ function _addPost(state) {
         likesCount: 0,
     };
 
-    state.posts.push(newPost);
-    _updateNewPostText(state, '');
+    const stateCopy = {
+        ...state,
+        posts: [...state.posts, newPost],
+        newPostText: ''
+    };
+
+    return stateCopy;
 }
 
 function _updateNewPostText(state, newText) {
-    state.newPostText = newText;
+    const stateCopy = {
+        ...state,
+        newPostText: newText
+    };
+
+    return stateCopy;
 }
 
 export function addPostActionCreator() {
