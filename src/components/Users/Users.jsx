@@ -5,8 +5,7 @@ import * as axios from 'axios';
 
 class Users extends React.Component {
 
-  constructor(props) {
-    super(props);
+  componentDidMount() {   // вызывается Реактом сразу после создания объекта
     this.getUsers();
   }
 
