@@ -1,43 +1,14 @@
 const FOLLOW = 'FOLLOW';
 const UNFOLLOW = 'UNFOLLOW';
 const SET_USERS = 'SET_USERS';
+const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
+const SET_TOTAL_USERS_COUNT = 'SET_TOTAL_USERS_COUNT';
 
 const initialState = {
-  users: [
-    // {
-    //     id: 1,
-    //     photoUrl: 'https://cs13.pikabu.ru/avatars/1873/x1873132-1972677953.png',
-    //     followed: false,
-    //     fullName: 'Имя 1',
-    //     status: 'Статус 1',
-    //     location: {city: 'Город 1', country: 'Страна 1'},
-    // },
-    // {
-    //     id: 2,
-    //     photoUrl: 'https://cs13.pikabu.ru/avatars/1873/x1873132-1972677953.png',
-    //     followed: true,
-    //     fullName: 'Имя 2',
-    //     status: 'Статус 2',
-    //     location: {city: 'Город 2', country: 'Страна 2'},
-    // },
-    // {
-    //     id: 3,
-    //     photoUrl: 'https://cs13.pikabu.ru/avatars/1873/x1873132-1972677953.png',
-    //     followed: false,
-    //     fullName: 'Имя 3',
-    //     status: 'Статус 3',
-    //     location: {city: 'Город 3', country: 'Страна 3'},
-    // },
-    // {
-    //     id: 4,
-    //     photoUrl: 'https://cs13.pikabu.ru/avatars/1873/x1873132-1972677953.png',
-    //     followed: true,
-    //     fullName: 'Имя 4',
-    //     status: 'Статус 4',
-    //     location: {city: 'Город 4', country: 'Страна 4'},
-    // },
-
-  ],
+  users: [],
+  pageSize: 5,
+  totalUsersCount: 0,
+  currentPage: 1,
 };
 
 function usersReducer(state = initialState, action) {
@@ -48,8 +19,11 @@ function usersReducer(state = initialState, action) {
     case UNFOLLOW:
       return _setFollow(state, action.userID, false);
     case SET_USERS:
-      return {...state, users: [...state.users, ...action.newUsers]};
-
+      return {...state, users: action.users};
+    case SET_CURRENT_PAGE:
+      return {...state, currentPage: action.selectedPage};
+    case SET_TOTAL_USERS_COUNT:
+      return {...state, totalUsersCount: action.totalCount};
   }
 
   return state;
@@ -78,8 +52,16 @@ export function unfollowAC(userID) {
   return {type: UNFOLLOW, userID};
 }
 
-export function setUsersAC(newUsers) {
-  return {type: SET_USERS, newUsers};
+export function setUsersAC(users) {
+  return {type: SET_USERS, users};
+}
+
+export function setCurrentPageAC(selectedPage) {
+  return {type: SET_CURRENT_PAGE, selectedPage};
+}
+
+export function setTotalUsersCountAC(totalCount) {
+  return {type: SET_TOTAL_USERS_COUNT, totalCount};
 }
 
 export default usersReducer;

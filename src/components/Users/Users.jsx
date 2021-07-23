@@ -6,17 +6,42 @@ import * as axios from 'axios';
 class Users extends React.Component {
 
   componentDidMount() {   // вызывается Реактом сразу после создания объекта
-    this.getUsers();
+    this.getUsers(this.props.currentPage);
   }
 
-  getUsers = () => {
-    axios.get('https://social-network.samuraijs.com/api/1.0/users').
-      then(response => {this.props.setUsers(response.data.items);});
+  getUsers = (page) => {
+    axios.get(
+      `https://social-network.samuraijs.com/api/1.0/users?page=${page}&count=${this.props.pageSize}`)
+    .then(response => {
+      this.props.setUsers(response.data.items);
+      this.props.setTotalUsersCount(response.data.totalCount);
+    });
   };
 
+  onPageChanged = (page) => {
+    this.props.setCurrentPage(page);
+    this.getUsers(page);
+  }
+
   render() {
+
+    const pagesCount = Math.ceil(this.props.totalUsersCount / this.props.pageSize);
+    const pages = [];
+    for (let i = 1; i <= pagesCount; i++) {
+      pages.push(i);
+    }
+
     return (
       <div>
+        <div>
+          {pages.map(page =>
+            <span className={this.props.currentPage === page && styles.selectedPage}
+                  onClick={ (event) => this.onPageChanged(page) } >
+              {' ' + page + ' '}</span>,
+          )}
+
+
+        </div>
         {
           this.props.users.map(user =>
             <div key={user.id}>
