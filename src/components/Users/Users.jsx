@@ -24,11 +24,9 @@ function Users(props) {
         {pages.map(page =>
           <span className={props.currentPage === page && styles.selectedPage}
                 onClick={(event) => props.onPageChanged(page)}>
-              {' ' + page + ' '}</span>,
+            {page}&#9;</span>,
         )}
-
-
-      </div>
+          </div>
       {
         props.users.map(user =>
           <div key={user.id}>
