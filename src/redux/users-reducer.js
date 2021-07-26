@@ -48,27 +48,28 @@ function _setFollow(state, userID, follow) {
   return stateCopy;
 }
 
-export function followAC(userID) {        // Action Creator
+// Action Creators
+export function follow(userID) {
   return {type: FOLLOW, userID};
 }
 
-export function unfollowAC(userID) {
+export function unfollow(userID) {
   return {type: UNFOLLOW, userID};
 }
 
-export function setUsersAC(users) {
+export function setUsers(users) {
   return {type: SET_USERS, users};
 }
 
-export function setCurrentPageAC(selectedPage) {
+export function setCurrentPage(selectedPage) {
   return {type: SET_CURRENT_PAGE, selectedPage};
 }
 
-export function setTotalUsersCountAC(totalCount) {
+export function setTotalUsersCount(totalCount) {
   return {type: SET_TOTAL_USERS_COUNT, totalCount};
 }
 
-export function toggleIsFetchingAC(isFetching) {
+export function toggleIsFetching(isFetching) {
   return {type: TOGGLE_IS_FETCHING, isFetching};
 }
 
