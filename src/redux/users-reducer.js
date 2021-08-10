@@ -1,3 +1,5 @@
+import {usersAPI} from '../api/api';
+
 const FOLLOW = 'FOLLOW';
 const UNFOLLOW = 'UNFOLLOW';
 const SET_USERS = 'SET_USERS';
@@ -31,10 +33,11 @@ function usersReducer(state = initialState, action) {
     case TOGGLE_IS_FETCHING:
       return {...state, isFetching: action.isFetching};
     case TOGGLE_IS_FOLLOWING:
-      return {...state,
+      return {
+        ...state,
         followingInProgress: action.isFetching
           ? [...state.followingInProgress, action.userID]
-          : state.followingInProgress.filter(id => id != action.userID)
+          : state.followingInProgress.filter(id => id != action.userID),
       };
 
   }
@@ -58,11 +61,11 @@ function _setFollow(state, userID, follow) {
 }
 
 // Action Creators
-export function follow(userID) {
+export function followSuccess(userID) {
   return {type: FOLLOW, userID};
 }
 
-export function unfollow(userID) {
+export function unfollowSuccess(userID) {
   return {type: UNFOLLOW, userID};
 }
 
@@ -84,6 +87,42 @@ export function toggleIsFetching(isFetching) {
 
 export function toggleFollowingInProgress(isFetching, userID) {
   return {type: TOGGLE_IS_FOLLOWING, isFetching, userID};
+}
+
+export const getUsers = (currentPage, pageSize) => {      // ThunkCreator
+  return (dispatch) => {
+    dispatch(toggleIsFetching(true));
+
+    usersAPI.getUsers(currentPage, pageSize).then(data => {
+      dispatch(toggleIsFetching(false));
+      dispatch(setUsers(data.items));
+      dispatch(setTotalUsersCount(data.totalCount));
+    });
+  };
+};
+
+export const follow = (userID) => {
+  return (dispatch) => {
+    dispatch(toggleFollowingInProgress(true, userID));
+    usersAPI.follow(userID).then(response => {
+      if (response.data.resultCode === 0) {
+        dispatch(followSuccess(userID));
+      }
+      dispatch(toggleFollowingInProgress(false, userID));
+    });
+  }
+}
+
+export const unfollow = (userID) => {
+  return (dispatch) => {
+    dispatch(toggleFollowingInProgress(true, userID));
+    usersAPI.unfollow(userID).then(response => {
+      if (response.data.resultCode === 0) {
+        dispatch(unfollowSuccess(userID));
+      }
+      dispatch(toggleFollowingInProgress(false, userID));
+    });
+  }
 }
 
 export default usersReducer;
