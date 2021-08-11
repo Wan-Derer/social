@@ -1,3 +1,5 @@
+import {authAPI} from '../api/api';
+
 const SET_USER_DATA = 'SET_USER_DATA';
 
 const initialState = {
@@ -34,8 +36,14 @@ export function setAuthUserData(userId, email, login) {
   return {type: SET_USER_DATA, data: {userId, email, login}};
 }
 
-// export function toggleIsFetching(isFetching) {
-//   return {type: TOGGLE_IS_FETCHING, isFetching};
-// }
+// Thunk Creators
+export const getAuthUserData = () => (dispatch) => {
+  authAPI.me().then(response => {
+    if (response.data.resultCode === 0) {
+      const {id, email, login} = response.data.data;
+      dispatch(setAuthUserData(id, email, login));
+    }
+  });
+}
 
 export default authReducer;
